@@ -1,4 +1,4 @@
-package xandao.kotlin.com.ceep
+package xandao.kotlin.com.ceep.ui.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.note_item.view.*
+import xandao.kotlin.com.ceep.R
+import xandao.kotlin.com.ceep.model.Note
 
 class NoteListAdapter(private val notes: List<Note>,
                       private val context: Context) : Adapter<NoteListAdapter.ViewHolder>(){
@@ -27,7 +29,7 @@ class NoteListAdapter(private val notes: List<Note>,
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindView(note:Note) {
+        fun bindView(note: Note) {
             val title = itemView.note_item_title
             val description = itemView.note_item_description
             title.text = note.title
