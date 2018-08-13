@@ -1,4 +1,5 @@
 package xandao.kotlin.com.ceep.model
 
-class Note(val title:String,
+data class Note(val id:Int = 0,
+           val title:String,
            val description:String)

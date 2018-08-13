@@ -6,9 +6,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_note_list.*
-import xandao.kotlin.com.ceep.NoteWebClient
+import xandao.kotlin.com.ceep.retrofit.NoteWebClient
 import xandao.kotlin.com.ceep.R
-import xandao.kotlin.com.ceep.dialog.AddNoteDialog
+import xandao.kotlin.com.ceep.dialog.NoteDialog
 import xandao.kotlin.com.ceep.model.Note
 import xandao.kotlin.com.ceep.ui.adapter.NoteListAdapter
 
@@ -28,9 +28,9 @@ class NoteListActivity : AppCompatActivity() {
         })
 
         fab_add_note.setOnClickListener {
-            AddNoteDialog(this,
+            NoteDialog(this,
                     window.decorView as ViewGroup)
-                    .show {
+                    .add {
                         notes.add(it)
                         configureList()
                     }
@@ -39,7 +39,17 @@ class NoteListActivity : AppCompatActivity() {
 
     private fun configureList() {
         val recyclerView = note_list_recyclerview
-        recyclerView.adapter = NoteListAdapter(notes, this)
+        recyclerView.adapter = NoteListAdapter(notes, this,{note, position ->
+            NoteDialog(this,window.decorView as ViewGroup).alter(note){
+                notes[position] = it
+                configureList()
+            }
+        },{note ->
+            NoteDialog(this,window.decorView as ViewGroup).delete(note){
+                notes.remove(note)
+                configureList()
+            }
+        })
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.layoutManager = layoutManager
     }

@@ -11,7 +11,9 @@ import xandao.kotlin.com.ceep.R
 import xandao.kotlin.com.ceep.model.Note
 
 class NoteListAdapter(private val notes: List<Note>,
-                      private val context: Context) : Adapter<NoteListAdapter.ViewHolder>(){
+                      private val context: Context,
+                      private val onItemClickListener: (note:Note, position:Int) -> Unit,
+                      private val onItemLongClickListener: (note:Note)->Unit) : Adapter<NoteListAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.note_item, parent, false)
@@ -20,7 +22,16 @@ class NoteListAdapter(private val notes: List<Note>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = notes[position]
-        holder.bindView(note)
+        holder?.let { item ->
+            item.bindView(note)
+            item.itemView.setOnClickListener {
+                onItemClickListener(note, position)
+            }
+            item.itemView.setOnLongClickListener {
+                onItemLongClickListener(note)
+                true
+            }
+        }
     }
 
     override fun getItemCount(): Int {
